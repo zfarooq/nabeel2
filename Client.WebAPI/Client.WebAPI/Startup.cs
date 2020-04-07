@@ -37,6 +37,15 @@ namespace Client.WebAPI
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			ConfigureCors(services);
 			ConfigureContext(services);
+			services.AddIdentity<IdentityUser, IdentityRole>(options =>
+			{
+				options.User.RequireUniqueEmail = true;
+			})
+			.AddEntityFrameworkStores<IdentityContext>();
+			services.AddDbContext<IdentityContext>(cfg =>
+			{
+				cfg.UseSqlServer(Configuration.GetConnectionString("IdentityContext"));
+			});
 			services.AddScoped<DbContext, ClientDBContext>();
 			ConfigureMapper(services);
 			ConfigureContainer(services);
